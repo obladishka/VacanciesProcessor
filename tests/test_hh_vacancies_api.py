@@ -5,6 +5,12 @@ import pytest
 import requests
 
 
+def test_hh(hh):
+    """Тестирует инициализацию объектов класса."""
+    assert len(hh.__dict__) == 4
+    assert [type(value) for value in hh.__dict__.values()] == [str, dict, dict, list]
+
+
 @patch("src.hh_vacancies_api.requests.get")
 def test_hh_get_vacancies(mock_get, hh, api_response):
     """Тестирует нормальную работу метода."""
