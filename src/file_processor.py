@@ -10,7 +10,7 @@ class FileProcessor(ABC):
         pass
 
     @abstractmethod
-    def save_data(self, data: dict):
+    def add_data(self, data: dict):
         """Метод добавления данных в файл."""
         pass
 

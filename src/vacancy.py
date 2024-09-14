@@ -48,7 +48,7 @@ class Vacancy:
         return other if isinstance(other, int) else other.max_salary
 
     @staticmethod
-    def __is_valid_salary(salary):
+    def __is_valid_salary(salary: float):
         """Метод для валидации зарплаты."""
         if not salary:
             return 0
@@ -57,7 +57,7 @@ class Vacancy:
         return salary
 
     @staticmethod
-    def __is_valid_ulr(url):
+    def __is_valid_ulr(url: str):
         """Метод для валидации ссылки на вакансию."""
         pattern = re.compile(
             r"^(?:http|ftp)s?://"
