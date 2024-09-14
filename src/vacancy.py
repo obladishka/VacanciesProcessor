@@ -34,19 +34,6 @@ class Vacancy:
         max_salary = self.__verify_data(other)
         return self.max_salary >= max_salary
 
-    def __is_valid_ulr(self, url):
-        """Метод для валидации ссылки на вакансию."""
-        pattern = re.compile(
-            r"^(?:http|ftp)s?://"
-            r"(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?$)"
-            r"(?::\d+)?"
-            r"(?:/?|[/?]\S+)$",
-            re.IGNORECASE,
-        )
-
-        if re.match(pattern, url) is not None and url.split("/")[-1] == self.vac_id:
-            return url
-
     @classmethod
     def new_vacancy(cls, vacancy: dict):
         """Метод для создания новых вакансий из словаря."""
@@ -63,6 +50,22 @@ class Vacancy:
     @staticmethod
     def __is_valid_salary(salary):
         """Метод для валидации зарплаты."""
+        if not salary:
+            return 0
         if salary < 0:
             raise ValueError("Зарплата не может быть отрицательной.")
-        return salary if salary else 0
+        return salary
+
+    @staticmethod
+    def __is_valid_ulr(url):
+        """Метод для валидации ссылки на вакансию."""
+        pattern = re.compile(
+            r"^(?:http|ftp)s?://"
+            r"(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?$)"
+            r"(?::\d+)?"
+            r"(?:/?|[/?]\S+)$",
+            re.IGNORECASE,
+        )
+
+        if re.match(pattern, url) is not None:
+            return url
