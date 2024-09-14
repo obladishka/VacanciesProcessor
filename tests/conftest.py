@@ -1,6 +1,7 @@
 import pytest
 
 from src.hh_vacancies_api import HHVacanciesApi
+from src.vacancy import Vacancy
 
 
 @pytest.fixture
@@ -77,3 +78,45 @@ def api_response():
         "alternate_url": "https://hh.ru/search/vacancy?enable_snippets=true",
     }
     return response
+
+
+@pytest.fixture
+def vacancy_1():
+    return Vacancy(
+        "106735215",
+        "Диспетчер чатов (в Яндекс)",
+        44000,
+        "RUR",
+        "Россия",
+        "Работать с клиентами или партнерами для решения разнообразных ситуаций. "
+        "Развивать процессы и инструменты для улучшения качества сервисов.",
+        "https://hh.ru/vacancy/106735215",
+    )
+
+
+@pytest.fixture
+def vacancy_2():
+    return Vacancy(
+        "106500391",
+        "Торговый представитель",
+        350000,
+        "KZT",
+        "Алматы",
+        "Работать с торговыми точками канала BC и HoReCa. Работать в «полевых» условиях. "
+        "Посещать торговые точки на вверенной территории. ",
+        "https://hh.ru/vacancy/106500391",
+    )
+
+
+@pytest.fixture
+def vacancy_dict():
+    return {
+        "vac_id": "107217584",
+        "name": "Специалист пункта выдачи заказов WILDBERRIES",
+        "max_salary": 800,
+        "currency": "BYR",
+        "place": "Мозырь",
+        "responsibilities": "Приемка товаров. Работа со складом. Выдача заказов покупателям. Оформление возвратов. "
+        "Поддержание пункта в чистоте и порядке.",
+        "url": "https://hh.ru/vacancy/107217584",
+    }
