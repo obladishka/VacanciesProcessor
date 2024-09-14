@@ -10,17 +10,17 @@ class JSONProcessor(FileProcessor):
 
     file_name: str
     file_path: str
-    vacancies: list
     vacancies_ids: list
 
-    BASE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
+    __BASE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
+    __vacancies = []
 
-    def __init__(self, vacancies: list, file_name="vacancies.json"):
+    def __init__(self, vacancies: list, file_name=None):
         """Метод для инициализации объектов класса."""
-        self.__file_name = self.__validate_file_name(file_name)
-        self.__file_path = os.path.join(self.BASE_PATH, self.__file_name)
-        self.__vacancies = self.__validate_vacancies(vacancies)
-        self.__vacancies_ids = []
+        self.__file_name = self.__validate_file_name(file_name) if file_name else "vacancies.json"
+        self.__file_path = os.path.join(self.__BASE_PATH, self.__file_name)
+        self.__vacancies.extend(self.__validate_vacancies(vacancies))
+        self.__vacancies_ids = [vacancy.get("vac_id") for vacancy in self.__vacancies]
 
         with open(self.__file_path, "w", encoding="utf-8") as f:
             json.dump(self.__vacancies, f, ensure_ascii=False, indent=4)
@@ -65,7 +65,7 @@ class JSONProcessor(FileProcessor):
         """Метод для валидации данных, записываемых в файл при инициализации объекта."""
         if type(vacancies) is not list or any(type(vacancy) is not dict for vacancy in vacancies):
             raise ValueError("Данные должны передаваться в виде списка словарей.")
-        return [vacancy for vacancy in vacancies if cls.__validate_data(vacancy)]
+        return [vacancy for vacancy in vacancies if cls.__validate_data(vacancy) and vacancy not in cls.__vacancies]
 
     @staticmethod
     def __validate_data(data: dict):
