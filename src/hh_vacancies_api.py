@@ -29,8 +29,8 @@ class HHVacanciesApi(VacanciesApi):
             if self.response.status_code == 200:
                 return self.response.json()
 
-    def get_vacancies(self, text: str, per_page: int = 100) -> list:
-        """Метод для получения вакансий."""
+    def __get_vacancies(self, text: str, per_page: int):
+        """Закрытый метод для получения вакансий."""
 
         if per_page > 100 or per_page <= 0:
             raise ValueError("Количество элементов должно быть от 1 до 100.")
@@ -46,4 +46,30 @@ class HHVacanciesApi(VacanciesApi):
                 self.__vacancies.extend(vacancies)
             self.__params["page"] += 1
 
-        return self.__vacancies
+        return self
+
+    def get_vacancies(self, text: str, per_page: int = 100):
+        """Публичный метод для получения вакансий и преобразования полученных данных в нужный формат.
+        Т.к. метод основан на данных, полученных с конкретного сайта, он прописан в классе."""
+        self.__get_vacancies(text, per_page)
+        result = []
+        for vacancy in self.__vacancies:
+            vacancy_dict = {
+                "vac_id": vacancy.get("id"),
+                "name": vacancy.get("name"),
+                "max_salary": (
+                    vacancy.get("salary").get("to")
+                    if vacancy.get("salary") and vacancy.get("salary").get("to")
+                    else (
+                        vacancy.get("salary").get("from") * 1.5
+                        if vacancy.get("salary") and vacancy.get("salary").get("from")
+                        else None
+                    )
+                ),
+                "currency": vacancy.get("salary").get("currency") if vacancy.get("salary") else "RUR",
+                "place": vacancy.get("area").get("name"),
+                "responsibilities": vacancy.get("snippet").get("responsibility"),
+                "url": vacancy.get("alternate_url"),
+            }
+            result.append(vacancy_dict)
+        return result

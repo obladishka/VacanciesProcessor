@@ -17,14 +17,34 @@ def test_hh_get_vacancies(mock_get, hh, api_response):
     mock_get.return_value.status_code = 200
     mock_get.return_value.json.return_value = api_response
 
-    assert hh.get_vacancies("Python")[0]["name"] == "Junior Python разработчик"
+    assert hh.get_vacancies("Python")[0] == {
+        "vac_id": "106571399",
+        "name": "Junior Python разработчик",
+        "max_salary": 187500,
+        "currency": "RUR",
+        "place": "Москва",
+        "responsibilities": "Разработка и поддержка backend части приложения на Python. "
+        "Работа с базами данных (например, PostgreSQL, MongoDB). "
+        "Написание чистого, эффективного и хорошо...",
+        "url": "https://hh.ru/vacancy/106571399",
+    }
     mock_get.assert_called_with(
         "https://api.hh.ru/vacancies",
         headers={"User-Agent": "HH-User-Agent"},
         params={"text": "Python", "page": 20, "per_page": 100},
     )
 
-    assert hh.get_vacancies("Python", 20)[0]["name"] == "Junior Python разработчик"
+    assert hh.get_vacancies("Python", 20)[0] == {
+        "vac_id": "106571399",
+        "name": "Junior Python разработчик",
+        "max_salary": 187500,
+        "currency": "RUR",
+        "place": "Москва",
+        "responsibilities": "Разработка и поддержка backend части приложения на Python. "
+        "Работа с базами данных (например, PostgreSQL, MongoDB). "
+        "Написание чистого, эффективного и хорошо...",
+        "url": "https://hh.ru/vacancy/106571399",
+    }
     mock_get.assert_called_with(
         "https://api.hh.ru/vacancies",
         headers={"User-Agent": "HH-User-Agent"},
