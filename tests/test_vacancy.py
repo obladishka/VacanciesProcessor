@@ -19,12 +19,26 @@ def test_vacancy_init(vacancy_1, vacancy_2):
     assert vacancy_2.url == "https://hh.ru/vacancy/106500391"
 
 
-def test_new_vacancy(vacancy_dict):
+def test_vacancy_new_vacancy(vacancy_dict):
     """Тестирует создание объекта класса из словаря."""
     vacancy = Vacancy.new_vacancy(vacancy_dict)
     assert vacancy.vac_id == "107217584"
     assert vacancy.max_salary == 800
     assert vacancy.url == "https://hh.ru/vacancy/107217584"
+
+
+def test_vacancy_to_dict(vacancy_1):
+    """Тестирует преобразование объекта в словарь."""
+    assert vacancy_1.to_dict() == {
+        "vac_id": "106735215",
+        "name": "Диспетчер чатов (в Яндекс)",
+        "max_salary": 44000,
+        "currency": "RUR",
+        "place": "Россия",
+        "responsibilities": "Работать с клиентами или партнерами для решения разнообразных ситуаций. "
+        "Развивать процессы и инструменты для улучшения качества сервисов.",
+        "url": "https://hh.ru/vacancy/106735215",
+    }
 
 
 def test_vacancy_salary_error(vacancy_dict):

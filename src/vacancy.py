@@ -34,6 +34,18 @@ class Vacancy:
         max_salary = self.__verify_data(other)
         return self.max_salary >= max_salary
 
+    def to_dict(self):
+        """Метод преобразования вакансии в словарь."""
+        return {
+            "vac_id": self.vac_id,
+            "name": self.name,
+            "max_salary": self.max_salary,
+            "currency": self.currency,
+            "place": self.place,
+            "responsibilities": self.responsibilities,
+            "url": self.url,
+        }
+
     @classmethod
     def new_vacancy(cls, vacancy: dict):
         """Метод для создания новых вакансий из словаря."""
