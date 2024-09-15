@@ -13,7 +13,7 @@ def test_json_processor_init(mock_json, mock_join, mock_dirname, mock_opened, va
     """Тестирует инициализацию объектов класса."""
     json_processor = JSONProcessor(vacancies_list)
 
-    assert len(json_processor.__dict__) == 3
+    assert len(json_processor.__dict__) == 4
 
     mock_json.assert_called_once_with(
         vacancies_list,
@@ -73,10 +73,13 @@ def test_json_processor_init_wrong_vacancies_wrong_keys(vacancy_dict):
 @patch("src.json_processor.json.load")
 def test_json_processor_get_data(mock_json_load, mock_join, mock_path, mock_open, vacancies_list):
     """Тестирует получение данных из файла."""
-    json_processor = JSONProcessor(vacancies_list)
     mock_json_load.return_value = vacancies_list
+    json_processor = JSONProcessor(vacancies_list)
 
-    assert json_processor.get_data() == vacancies_list
+    vacancies, ids = json_processor.get_data()
+
+    assert vacancies == vacancies_list
+    assert ids == ["106735215", "106500391"]
     mock_open.assert_called_with("/mock/path/vacancies.json", encoding="utf-8")
 
 
@@ -89,8 +92,8 @@ def test_json_processor_add_data(
     mock_get_data, mock_json_dump, mock_join, mock_path, mock_open, vacancies_list, vacancy_dict
 ):
     """Тестирует добавление новых данных в файл."""
+    mock_get_data.return_value = vacancies_list, ["106735215", "106500391"]
     json_processor = JSONProcessor(vacancies_list)
-    mock_get_data.return_value = vacancies_list
     json_processor.add_data(vacancy_dict)
 
     vacancies_list.append(vacancy_dict)
@@ -111,8 +114,8 @@ def test_json_processor_add_data_existing_data(
     mock_get_data, mock_json_dump, mock_join, mock_path, mock_open, vacancies_list
 ):
     """Тестирует работу метода при добавлении существующих данных."""
+    mock_get_data.return_value = vacancies_list, ["106735215", "106500391"]
     json_processor = JSONProcessor(vacancies_list)
-    mock_get_data.return_value = vacancies_list
     json_processor.add_data(vacancies_list[0])
 
     mock_json_dump.assert_called_with(
@@ -147,8 +150,8 @@ def test_json_processor_add_data_wrong_data(
 @patch("src.json_processor.JSONProcessor.get_data")
 def test_json_processor_delete_data(mock_get_data, mock_json_dump, mock_join, mock_path, mock_open, vacancies_list):
     """Тестирует удаление заданной вакансии из файла."""
+    mock_get_data.return_value = vacancies_list, ["106735215", "106500391"]
     json_processor = JSONProcessor(vacancies_list)
-    mock_get_data.return_value = vacancies_list
     json_processor.delete_data(vacancies_list[0])
 
     mock_json_dump.assert_called_with(
