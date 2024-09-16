@@ -66,7 +66,11 @@ class HHVacanciesApi(VacanciesApi):
                         else None
                     )
                 ),
-                "currency": vacancy.get("salary").get("currency") if vacancy.get("salary") else "RUR",
+                "currency": (
+                    vacancy.get("salary").get("currency")
+                    if vacancy.get("salary")
+                    else "BYN" if vacancy.get("salary") and vacancy.get("salary").get("currency") == "BYR" else "RUR"
+                ),
                 "place": vacancy.get("area").get("name"),
                 "responsibilities": vacancy.get("snippet").get("responsibility"),
                 "url": vacancy.get("alternate_url"),

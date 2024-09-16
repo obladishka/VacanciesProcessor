@@ -20,7 +20,9 @@ def convert_to_ruble(currencies_rates: dict, currency: str) -> float:
     """Функция для преобразования суммы в рубли."""
     value = currencies_rates.get(currency, {}).get("Value")
     nominal = currencies_rates.get(currency, {}).get("Nominal")
-    return round(value / nominal, 2)
+    if value and nominal:
+        return round(value / nominal, 2)
+    return 0
 
 
 def dict_to_vacancy(vacancies: list[dict]) -> list[Vacancy]:
@@ -52,7 +54,7 @@ def filter_by_place(vacancies: list[dict], place: str) -> list[dict]:
 def sort_by_salary(vacancies: list[dict], top_n: int) -> list[dict]:
     """Функция для сортировки вакансий по зарплате."""
     if top_n <= 0 or top_n > len(vacancies):
-        raise ValueError(f"Введите число в диапазоне от 0 до {len(vacancies)}.")
+        raise ValueError(f"Введите число в диапазоне от 1 до {len(vacancies)}.")
 
     rates = get_currencies_rates()
     vacancies = dict_to_vacancy(vacancies)
