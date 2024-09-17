@@ -21,7 +21,7 @@ class Vacancy:
         self.max_salary = self.__is_valid_salary(max_salary)
         self.currency = currency
         self.place = place
-        self.responsibilities = responsibilities
+        self.responsibilities = responsibilities if responsibilities else ""
         self.url = self.__is_valid_ulr(url)
 
     def __le__(self, other):
